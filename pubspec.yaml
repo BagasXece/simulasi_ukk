@@ -7,8 +7,17 @@ environment:
   sdk: ^3.9.0
 
 dependencies:
+  authentication_repository:
+    path: packages/authentication_repository
+  bloc: ^9.1.0
+  equatable: ^2.0.7
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.1
+  formz: ^0.8.0
+  supabase_flutter: ^2.10.3
+  user_repository:
+    path: packages/user_repository
 
 dev_dependencies:
   flutter_test:
