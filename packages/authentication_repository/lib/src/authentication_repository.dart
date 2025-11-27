@@ -61,26 +61,6 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> signUp({
-    required String email,
-    required String password,
-    required String fullName,
-  }) async {
-    try {
-      final response = await _supabaseClient.auth.signUp(
-        email: email,
-        password: password,
-        data: {'full_name': fullName},
-      );
-      
-      if (response.user == null) {
-        throw Exception('Sign up failed: No user returned');
-      }
-    } catch (e) {
-      throw Exception('Sign up failed: ${e.toString()}');
-    }
-  }
-
   Future<void> logOut() async {
     try {
       await _supabaseClient.auth.signOut();

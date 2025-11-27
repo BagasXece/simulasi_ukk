@@ -39,7 +39,7 @@ class _UsernameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayError = context.select(
-      (LoginBloc bloc) => bloc.state.username.displayError,
+      (LoginBloc bloc) => bloc.state.email.displayError,
     );
 
     return TextField(
@@ -49,9 +49,9 @@ class _UsernameInput extends StatelessWidget {
       },
       decoration: InputDecoration(
         labelText: 'Email',
-        errorText: displayError == UsernameValidationError.empty
+        errorText: displayError == EmailValidationError.empty
             ? 'Email cannot be empty'
-            : displayError == UsernameValidationError.invalid
+            : displayError == EmailValidationError.invalid
                 ? 'Invalid email format'
                 : null,
       ),

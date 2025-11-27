@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simulasi_ukk/app_routes.dart';
 import 'package:simulasi_ukk/create_user/create_user.dart';
 import 'package:formz/formz.dart';
 
@@ -14,7 +15,9 @@ class CreateUserForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text('Create User Failed: ${state.errorMessage}')),
+              SnackBar(
+                content: Text('Create User Failed: ${state.errorMessage}'),
+              ),
             );
         }
         if (state.status.isSuccess) {
@@ -25,8 +28,18 @@ class CreateUserForm extends StatelessWidget {
             );
           // Clear form after success
           context.read<CreateUserBloc>().add(const CreateUserEmailChanged(''));
-          context.read<CreateUserBloc>().add(const CreateUserPasswordChanged(''));
-          context.read<CreateUserBloc>().add(const CreateUserFullNameChanged(''));
+          context.read<CreateUserBloc>().add(
+            const CreateUserPasswordChanged(''),
+          );
+          context.read<CreateUserBloc>().add(
+            const CreateUserFullNameChanged(''),
+          );
+
+          Future.delayed(const Duration(milliseconds: 1500), () {
+            if (AppRoutes.canPop(context)) {
+              AppRoutes.pop(context);
+            }
+          });
         }
       },
       child: SingleChildScrollView(
@@ -64,8 +77,8 @@ class _EmailInput extends StatelessWidget {
         errorText: displayError == EmailValidationError.empty
             ? 'Email cannot be empty'
             : displayError == EmailValidationError.invalid
-                ? 'Invalid email format'
-                : null,
+            ? 'Invalid email format'
+            : null,
       ),
     );
   }
@@ -88,8 +101,8 @@ class _PasswordInput extends StatelessWidget {
         errorText: displayError == PasswordValidationError.empty
             ? 'Password cannot be empty'
             : displayError == PasswordValidationError.tooShort
-                ? 'Password must be at least 6 characters'
-                : null,
+            ? 'Password must be at least 6 characters'
+            : null,
       ),
     );
   }
@@ -122,7 +135,7 @@ class _RoleDropdown extends StatelessWidget {
     );
 
     return DropdownButtonFormField<String>(
-      value: currentRole,
+      initialValue: currentRole,
       items: const [
         DropdownMenuItem(value: 'petugas', child: Text('Petugas')),
         DropdownMenuItem(value: 'admin', child: Text('Admin')),
@@ -155,7 +168,9 @@ class _CreateButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: isValid
-            ? () => context.read<CreateUserBloc>().add(const CreateUserSubmitted())
+            ? () => context.read<CreateUserBloc>().add(
+                const CreateUserSubmitted(),
+              )
             : null,
         child: const Text('Create User'),
       ),

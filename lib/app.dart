@@ -1,10 +1,9 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:product_repository/product_repository.dart';
+import 'package:simulasi_ukk/app_routes.dart';
 import 'package:simulasi_ukk/authentication/authentication.dart';
-import 'package:simulasi_ukk/home/home.dart';
-import 'package:simulasi_ukk/login/login.dart';
-import 'package:simulasi_ukk/splash/splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -22,6 +21,11 @@ class App extends StatelessWidget {
         ),
         RepositoryProvider(
           create: (_) => UserRepository(
+            supabaseClient: Supabase.instance.client,
+          ),
+        ),
+        RepositoryProvider(
+          create: (_) => ProductRepository(
             supabaseClient: Supabase.instance.client,
           ),
         ),
@@ -55,28 +59,28 @@ class _AppViewState extends State<AppView> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: _navigatorKey,
+      routes: AppRoutes.routes,
+      initialRoute: AppRoutes.splash,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            switch (state.status) {
-              case AuthenticationStatus.authenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  HomePage.route(),
-                  (route) => false,
-                );
-              case AuthenticationStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
-                  (route) => false,
-                );
-              case AuthenticationStatus.unknown:
-                break;
-            }
+            _handleAuthenticationState(context, state);
           },
           child: child,
         );
       },
-      onGenerateRoute: (_) => SplashPage.route(),
+      // onGenerateRoute: (_) => SplashPage.route(),
     );
+  }
+
+  void _handleAuthenticationState(BuildContext context, AuthenticationState state) {
+    switch (state.status) {
+      case AuthenticationStatus.authenticated:
+        _navigator.pushNamedAndRemoveUntil(AppRoutes.home, (route) => false,);
+      case AuthenticationStatus.unauthenticated:
+        _navigator.pushNamedAndRemoveUntil(AppRoutes.login, (route) => false,);
+      case AuthenticationStatus.unknown:
+        break;
+    }
   }
 }

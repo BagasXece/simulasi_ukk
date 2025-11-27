@@ -18,7 +18,7 @@ class UserRepository {
           .eq('id', currentUser.id)
           .single();
 
-      final data = response as Map<String, dynamic>;
+      final data = response;
       return Users.fromJson(data);
     } catch (e) {
       return null;
@@ -53,7 +53,6 @@ Future<void> createUser({
     }
 
     final token = session.accessToken;
-    print('Token: $token'); // Debug token
 
     final response = await _supabaseClient.functions.invoke(
       'create-user',
@@ -68,8 +67,6 @@ Future<void> createUser({
       },
     );
 
-    print('Response status: ${response.status}'); // Debug status
-    print('Response data: ${response.data}'); // Debug data
 
     if (response.status != 200) {
       final data = response.data as Map<String, dynamic>?;
@@ -80,7 +77,6 @@ Future<void> createUser({
     // Success
     return;
   } catch (e) {
-    print('Detailed error: $e'); // Debug detailed error
     throw Exception('Failed to create user: ${e.toString()}');
   }
 }

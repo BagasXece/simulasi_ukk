@@ -6,10 +6,6 @@ import 'package:user_repository/user_repository.dart';
 class CreateUserPage extends StatelessWidget {
   const CreateUserPage({super.key});
 
-  static Route<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const CreateUserPage());
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
