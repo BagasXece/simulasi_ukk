@@ -10,6 +10,8 @@ dependencies:
   authentication_repository:
     path: packages/authentication_repository
   bloc: ^9.1.0
+  customer_repository:
+    path: packages/customer_repository
   equatable: ^2.0.7
   flutter:
     sdk: flutter
@@ -19,8 +21,10 @@ dependencies:
   product_repository:
     path: packages/product_repository
   supabase_flutter: ^2.10.3
+  url_strategy: ^0.3.0
   user_repository:
     path: packages/user_repository
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

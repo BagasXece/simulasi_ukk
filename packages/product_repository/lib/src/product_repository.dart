@@ -5,13 +5,16 @@ class ProductRepository {
   final SupabaseClient _supabaseClient;
 
   ProductRepository({required SupabaseClient supabaseClient})
-      : _supabaseClient = supabaseClient;
+    : _supabaseClient = supabaseClient;
 
   /* ---------- SINGLE PRODUCT ---------- */
   Future<Product?> getProduct(String id) async {
     try {
-      final response =
-          await _supabaseClient.from('produk').select().eq('id', id).single();
+      final response = await _supabaseClient
+          .from('produk')
+          .select()
+          .eq('id', id)
+          .single();
       return Product.fromJson(response);
     } catch (_) {
       return null;
@@ -26,19 +29,18 @@ class ProductRepository {
     int limit = 100,
   }) async {
     try {
-      var filter =
-      _supabaseClient.from('produk').select();
+      var filter = _supabaseClient.from('produk').select();
 
-  if (kategori != null) filter = filter.eq('kategori', kategori);
+      if (kategori != null) filter = filter.eq('kategori', kategori);
 
-  // 2. Tambahkan transform & eksekusi dalam satu rantai baru
-  final response = await filter
-      .order(sortByHarga ? 'harga' : 'created_at')
-      .limit(limit);
+      // 2. Tambahkan transform & eksekusi dalam satu rantai baru
+      final response = await filter
+          .order(sortByHarga ? 'harga' : 'created_at')
+          .limit(limit);
 
-  return (response as List)
-      .map((e) => Product.fromJson(e as Map<String, dynamic>))
-      .toList();
+      return (response as List)
+          .map((e) => Product.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       throw Exception('Failed to get products: $e');
     }
@@ -100,10 +102,13 @@ class ProductRepository {
   /* ---------- UPDATE STOCK ---------- */
   Future<void> updateProductStock(String productId, int newStock) async {
     try {
-      await _supabaseClient.from('produk').update({
-        'stok': newStock,
-        'updated_at': DateTime.now().toIso8601String(),
-      }).eq('id', productId);
+      await _supabaseClient
+          .from('produk')
+          .update({
+            'stok': newStock,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', productId);
     } catch (e) {
       throw Exception('Failed to update stock: $e');
     }
@@ -121,8 +126,7 @@ class ProductRepository {
   /* ---------- LIST CATEGORIES ---------- */
   Future<List<String>> getKategories() async {
     try {
-      final response =
-          await _supabaseClient.from('produk').select('kategori');
+      final response = await _supabaseClient.from('produk').select('kategori');
       final kategories = (response as List)
           .map((e) => e['kategori'] as String)
           .toSet()
@@ -163,7 +167,8 @@ class ProductRepository {
 
   /* ---------- MULTIPLE CATEGORIES (client-side filter) ---------- */
   Future<List<Product>> getProductsByMultipleKategories(
-      List<String> kategories) async {
+    List<String> kategories,
+  ) async {
     if (kategories.isEmpty) return getProducts();
     final all = await getProducts();
     return all.where((p) => kategories.contains(p.kategori)).toList();
@@ -171,7 +176,9 @@ class ProductRepository {
 
   /* ---------- PRICE RANGE ---------- */
   Future<List<Product>> getProductsByPriceRange(
-      double minPrice, double maxPrice) async {
+    double minPrice,
+    double maxPrice,
+  ) async {
     try {
       final response = await _supabaseClient
           .from('produk')

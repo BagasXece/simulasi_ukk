@@ -159,13 +159,13 @@ class _UserInfoCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            _InfoItem(
-              icon: Icons.fingerprint,
-              label: 'User ID',
-              value: user.id,
-            ),
-            const SizedBox(height: 12),
+            // const SizedBox(height: 16),
+            // _InfoItem(
+            //   icon: Icons.fingerprint,
+            //   label: 'User ID',
+            //   value: user.id,
+            // ),
+            // const SizedBox(height: 12),
             _InfoItem(
               icon: Icons.verified_user,
               label: 'Role',
@@ -282,11 +282,27 @@ class _QuickActions extends StatelessWidget {
               ),
             ],
             _ActionCard(
+              icon: Icons.people_rounded,
+              title: 'Pelanggan',
+              color: Colors.red,
+              onTap: () {
+                AppRoutes.pushNamed(context, AppRoutes.customer);
+              },
+            ),
+            _ActionCard(
               icon: Icons.inventory_2,
               title: 'Daftar Produk',
               color: Colors.purple,
               onTap: () {
                 AppRoutes.pushNamed(context, AppRoutes.produk);
+              },
+            ),
+            _ActionCard(
+              icon: Icons.add,
+              title: 'Tambah Pelanggan',
+              color: Colors.black,
+              onTap: () {
+                AppRoutes.pushNamed(context, AppRoutes.addCustomer);
               },
             ),
             _ActionCard(

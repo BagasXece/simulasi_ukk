@@ -92,7 +92,7 @@ void main() {
         )).thenAnswer((_) async => mockAuthResponse);
 
         await authenticationRepository.logIn(
-          username: 'test@example.com',
+          email: 'test@example.com',
           password: 'password123',
         );
 
@@ -110,7 +110,7 @@ void main() {
 
         expect(
           () async => await authenticationRepository.logIn(
-            username: 'test@example.com',
+            email: 'test@example.com',
             password: 'wrongpassword',
           ),
           throwsA(isA<Exception>()),
@@ -128,7 +128,7 @@ void main() {
 
         expect(
           () async => await authenticationRepository.logIn(
-            username: 'test@example.com',
+            email: 'test@example.com',
             password: 'password123',
           ),
           throwsA(isA<Exception>()),

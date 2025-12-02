@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:customer_repository/customer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_repository/product_repository.dart';
@@ -20,14 +21,16 @@ class App extends StatelessWidget {
           ),
         ),
         RepositoryProvider(
-          create: (_) => UserRepository(
-            supabaseClient: Supabase.instance.client,
-          ),
+          create: (_) =>
+              UserRepository(supabaseClient: Supabase.instance.client),
         ),
         RepositoryProvider(
-          create: (_) => ProductRepository(
-            supabaseClient: Supabase.instance.client,
-          ),
+          create: (_) =>
+              ProductRepository(supabaseClient: Supabase.instance.client),
+        ),
+        RepositoryProvider(
+          create: (_) =>
+              CustomerRepository(supabaseClient: Supabase.instance.client),
         ),
       ],
       child: BlocProvider(
@@ -60,7 +63,8 @@ class _AppViewState extends State<AppView> {
       debugShowCheckedModeBanner: false,
       navigatorKey: _navigatorKey,
       routes: AppRoutes.routes,
-      initialRoute: AppRoutes.splash,
+      // initialRoute: AppRoutes.splash,
+      // onGenerateRoute: AppRoutes.generateRoute,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
@@ -73,12 +77,15 @@ class _AppViewState extends State<AppView> {
     );
   }
 
-  void _handleAuthenticationState(BuildContext context, AuthenticationState state) {
+  void _handleAuthenticationState(
+    BuildContext context,
+    AuthenticationState state,
+  ) {
     switch (state.status) {
       case AuthenticationStatus.authenticated:
-        _navigator.pushNamedAndRemoveUntil(AppRoutes.home, (route) => false,);
+        _navigator.pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
       case AuthenticationStatus.unauthenticated:
-        _navigator.pushNamedAndRemoveUntil(AppRoutes.login, (route) => false,);
+        _navigator.pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
       case AuthenticationStatus.unknown:
         break;
     }
